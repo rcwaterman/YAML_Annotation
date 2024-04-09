@@ -1,0 +1,10 @@
+#Data locations
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+#Number of categories
+nc: 5
+
+#Category names
+names: ['Ambulance', 'Bus', 'Car', 'Motorcycle', 'Truck']
