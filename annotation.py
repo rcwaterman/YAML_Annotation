@@ -28,8 +28,8 @@ def select_dir(change_dir=False, change_dataset=False):
 
     #Default to the training folder.
     if not change_dataset:
-        image_dir = os.path.join(data_dir, r'train\images')
-        label_dir = os.path.join(data_dir, r'train\labels')
+        image_dir = os.path.join(data_dir, r'original_images\images')
+        label_dir = os.path.join(data_dir, r'original_images\labels')
     else:
         image_dir = os.path.join(data_dir, rf'{dirs.get()}\images')
         label_dir = os.path.join(data_dir, rf'{dirs.get()}\labels')
@@ -103,7 +103,7 @@ frm.grid()
 #define variables
 label_list = []
 tool_list = ["Rectangle", "Circle"]
-directory_list = ["train", "test", "valid"]
+directory_list = ["original_images","train", "test", "valid"]
 img_size = (960, 720)
 init_x, init_y, x, y,index = 0,0,0,0,0
 text_offset = 10
