@@ -12,28 +12,40 @@ The user will select a data directory, then the program will recursively open ea
 
 tk.Tk().withdraw() # prevents an empty tkinter window from appearing
 
-def select_dir(change=False):
+def select_dir(change_dir=False, change_dataset=False):
     global img_list
     global label_dir
-    global data_dir
+    global image_dir
     global max_index
     global classifiers
+    global data_dir
     classifiers = []
-    #Choose the initial data directory
-    data_dir = filedialog.askdirectory()
-    label_dir = data_dir + "_labels"
+
+    #If the directory is being changed
+    if not change_dir and not change_dataset:
+        #Choose the initial data directory
+        data_dir = filedialog.askdirectory()
+
+    #Default to the training folder.
+    if not change_dataset:
+        image_dir = os.path.join(data_dir, r'train\images')
+        label_dir = os.path.join(data_dir, r'train\labels')
+    else:
+        image_dir = os.path.join(data_dir, rf'{dirs.get()}\images')
+        label_dir = os.path.join(data_dir, rf'{dirs.get()}\labels')
+
     img_list = []
-    
+
     #Pull all of the images and append to list
-    for file in os.listdir(data_dir):
+    for file in sorted(os.listdir(image_dir)):
         if file.endswith(".png") or file.endswith(".jpg"):
             img_list.append(file)
-
+    
     #Filter through the files in the label directory to find the .yaml file
-    for file in os.listdir(label_dir):
+    for file in os.listdir(data_dir):
         if file.endswith('.yaml'):
             #Open the file
-            f = open(os.path.join(label_dir, file), "r")
+            f = open(os.path.join(data_dir, file), "r")
             #Read the lines of a file into a list
             lines = f.readlines()
             #loop through each line to find the line that contains the classifiers
@@ -57,12 +69,17 @@ def select_dir(change=False):
     max_index = len(img_list)-1
 
     #If this is being called from a directory change, update the class selections and load the new image
-    if change:
+    if change_dir:
         menu=select_class["menu"]
         menu.delete(0,"end")
         for cls in classifiers:
             menu.add_command(label=cls,command=lambda value=cls: obj_class.set(value)) 
         obj_class.set(f'{classifiers[0]}')
+        init_x, init_y, x, y,index = 0,0,0,0,0
+        loadAnnotations(index)
+
+    #If the dataset is being changed, re-show the image and annotations
+    if change_dataset:
         init_x, init_y, x, y,index = 0,0,0,0,0
         loadAnnotations(index)
 
@@ -86,17 +103,20 @@ frm.grid()
 #define variables
 label_list = []
 tool_list = ["Rectangle", "Circle"]
+directory_list = ["train", "test", "valid"]
 img_size = (960, 720)
 init_x, init_y, x, y,index = 0,0,0,0,0
 text_offset = 10
 obj_class = StringVar(frm)
 tools = StringVar(frm)
+dirs = StringVar(frm)
 obj_class.set(f'{classifiers[0]}')
 tools.set(tool_list[0])
+dirs.set(directory_list[0])
 
 #Set up image feed
 feed = Label(frm)
-feed.grid(row = 0, column = 0, padx = 5, pady = 5, columnspan = 5, rowspan=2, sticky = "nsew")
+feed.grid(row = 0, column = 0, padx = 5, pady = 5, columnspan = 5, rowspan=3, sticky = "nsew")
 
 def getInitOrigin(eventorigin):
     global init_x, init_y
@@ -127,7 +147,7 @@ def showImage(from_origin=False):
     global label_list
     global init_x, init_y, x, y
 
-    img = os.path.join(data_dir, img_list[index])
+    img = os.path.join(image_dir, img_list[index])
     #Grab image from cam and convert to tkinter friendly format
     cv2image=cv2.cvtColor(cv2.imread(img),cv2.COLOR_BGR2RGB)
     cv2image=cv2.resize(cv2image, img_size)
@@ -251,23 +271,29 @@ def clearLastAnnotation():
     #Load the annotations and draw them to the image
     loadAnnotations(index)
 
-prev_image = tk.Button(frm, text='Previous Image', command=lambda: loadAnnotations(index-1), font = ('calibre',16,'bold'), fg = "green").grid(column=0, row=2)
+prev_image = tk.Button(frm, text='Previous Image', command=lambda: loadAnnotations(index-1), font = ('calibre',16,'bold'), fg = "green").grid(column=0, row=3)
 
-clear_last_annotation = tk.Button(frm, text='Clear Last Annotation', command=clearLastAnnotation, font = ('calibre',16,'bold'), fg = "red").grid(column=1, row=2)
+clear_last_annotation = tk.Button(frm, text='Clear Last Annotation', command=clearLastAnnotation, font = ('calibre',16,'bold'), fg = "red").grid(column=1, row=3)
 
-change_dir = tk.Button(frm, text='Change Directory', command=lambda: select_dir(True), font = ('calibre',16,'bold'), fg = "Black").grid(column=2, row=2)
+change_dir = tk.Button(frm, text='Change Directory', command=lambda: select_dir(change_dir=True), font = ('calibre',16,'bold'), fg = "Black").grid(column=2, row=3)
 
-clear_annotations = tk.Button(frm, text='Clear All Annotations', command=clearAllAnnotations, font = ('calibre',16,'bold'), fg = "red").grid(column=3, row=2)
+clear_annotations = tk.Button(frm, text='Clear All Annotations', command=clearAllAnnotations, font = ('calibre',16,'bold'), fg = "red").grid(column=3, row=3)
 
-next_image = tk.Button(frm, text='Next Image', command=lambda: loadAnnotations(index+1), font = ('calibre',16,'bold'), fg = "green").grid(column=4, row=2)
-
-select_class = tk.OptionMenu(frm, obj_class, *classifiers)
-select_class.grid(column=5, row=1)
+next_image = tk.Button(frm, text='Next Image', command=lambda: loadAnnotations(index+1), font = ('calibre',16,'bold'), fg = "green").grid(column=4, row=3)
 
 select_tool = tk.OptionMenu(frm, tools, *tool_list)
 select_tool.grid(column=5, row=0)
 
+select_class = tk.OptionMenu(frm, obj_class, *classifiers)
+select_class.grid(column=5, row=1)
+
+select_directory = tk.OptionMenu(frm, dirs, *directory_list)
+select_directory.grid(column=5, row=2)
+
 loadAnnotations(index)
+
+#Perform this at the end so the select_dir function isn't called twice on launch
+dirs.trace_add("write", lambda *args: select_dir(False, True))
 
 #this starts the mainloop for the gui
 gui.mainloop()
