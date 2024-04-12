@@ -94,7 +94,7 @@ global classifiers
 select_dir()
 
 #Initialize tkinter gui
-gui = tk.Tk(className = ' TAD Image Capture')
+gui = tk.Tk(className = ' YAML Annotation')
 
 #Initialize the frame and specify a grid structure
 frm = tk.Frame(gui)
