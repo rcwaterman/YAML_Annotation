@@ -23,4 +23,12 @@ Data locations refer to the training, validation, and test image directories. It
 
 The YAML Annotation Tool (./YAML/annotation.py) is designed to automatically generate and store label files in [Ultraltics YOLO format](https://docs.ultralytics.com/datasets/detect/). The tool also supports real time editing of existing labels for a given directory of labels through the GUI. 
 
-Directory structure is critical for annotation tool functionality. Every data folder must have an adjacent folder with a '_labels' suffix.
+Directory structure is critical for annotation tool functionality. Each directory for which the tool will be used must have a folder structure that matches the images, below.
+
+![image](https://github.com/rcwaterman/YAML_Annotation/assets/134216651/42efb2ce-920d-4f76-ad50-3ff4424469be)
+
+Each folder in the directory should have the following subfolders:
+
+![Uploading image.png…]()
+
+
