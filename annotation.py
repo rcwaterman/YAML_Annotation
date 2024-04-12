@@ -1,8 +1,3 @@
-"""
-Implementation of annotation.py using class structure instead of functional structure. 
-This implementation will replace the current implementation when complete.
-"""
-
 import tkinter as tk
 from tkinter import filedialog, Label, StringVar
 from PIL import ImageTk, Image
