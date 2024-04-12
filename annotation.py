@@ -120,23 +120,25 @@ feed.grid(row = 0, column = 0, padx = 5, pady = 5, columnspan = 5, rowspan=3, st
 
 def getInitOrigin(eventorigin):
     global init_x, init_y
-    init_x = eventorigin.x
-    init_y = eventorigin.y
+    init_x = eventorigin.x if eventorigin.x>=0 else 0
+    init_y = eventorigin.y if eventorigin.y>=0 else 0
+    init_x = init_x if init_x <= img_size[0] else img_size[0]-1
+    init_y = init_y if init_y <= img_size[1] else img_size[1]-1
 
 def getOrigin(eventorigin):
-      global x,y
-      x = eventorigin.x
-      y = eventorigin.y
-      showImage(True)
+    global x,y
+    x = eventorigin.x if eventorigin.x>=0 else 0
+    y = eventorigin.y if eventorigin.y>=0 else 0
+    x = x if x <= img_size[0] else img_size[0]-1
+    y = y if y <= img_size[1] else img_size[1]-1
+    showImage(True)
 
 def updateLabel(eventorigin):
-    global release_x, release_y, init_x, init_y, x, y, index
-    release_x = eventorigin.x
-    release_y = eventorigin.y
+    global init_x, init_y, x, y, index
     #Stop clicking from saving the image
-    if abs(release_x-init_x) > 2 and abs(release_y-init_y) > 2 and init_x > 0:
+    if abs(x-init_x) > 2 and abs(y-init_y) > 2 and init_x > 0:
         saveAnnotations()
-    release_x, release_y,init_x, init_y, x, y = 0,0,0,0,0,0
+    init_x, init_y, x, y = 0,0,0,0
 
 feed.bind("<Button-1>", getInitOrigin)
 feed.bind("<B1-Motion>",getOrigin)
