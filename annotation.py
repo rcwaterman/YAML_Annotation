@@ -230,9 +230,9 @@ def nextAnnotation():
     loadAnnotations(index)
 
 def saveAnnotations():
-    global init_x, init_y, release_x, release_y, img_list, classifiers, index
+    global init_x, init_y, img_list, classifiers, index
     #Normalize the bounding box coordinates
-    norm_init_x, norm_init_y, norm_release_x, norm_release_y = init_x/img_size[0], init_y/img_size[1], release_x/img_size[0], release_y/img_size[1]
+    norm_init_x, norm_init_y, norm_release_x, norm_release_y = init_x/img_size[0], init_y/img_size[1], x/img_size[0], y/img_size[1]
 
     cls = classifiers.index(f'{obj_class.get()}')
     if tools.get() == "Rectangle":
