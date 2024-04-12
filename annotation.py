@@ -216,6 +216,17 @@ def loadAnnotations(idx):
 
     showImage()   
 
+def nextAnnotation():
+    """
+    Finds the next image in the list that needs to be annotated, assuming the user is annotating the images in order.
+    """
+    global index, img_list
+    last_label = [file for file in sorted(os.listdir(label_dir)) if file.endswith('.txt')][-1]
+    for idx, name in enumerate(img_list):
+        if last_label.split('.')[0] in name.split('.')[0]:
+            index = idx+1
+    loadAnnotations(index)
+
 def saveAnnotations():
     global init_x, init_y, release_x, release_y, img_list, classifiers, index
     #Normalize the bounding box coordinates
