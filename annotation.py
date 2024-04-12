@@ -294,6 +294,8 @@ clear_annotations = tk.Button(frm, text='Clear All Annotations', command=clearAl
 
 next_image = tk.Button(frm, text='Next Image', command=lambda: loadAnnotations(index+1), font = ('calibre',16,'bold'), fg = "green").grid(column=4, row=3)
 
+next_annotation = tk.Button(frm, text='Next Annotation', command=nextAnnotation, font = ('calibre',14,'bold'), fg = "green").grid(column=5, row=2)
+
 select_tool = tk.OptionMenu(frm, tools, *tool_list)
 select_tool.grid(column=5, row=0)
 
