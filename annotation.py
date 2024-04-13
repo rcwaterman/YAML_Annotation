@@ -371,9 +371,20 @@ class Annotate:
         self.loadAnnotations()
 
     def clearAllAnnotations(self):
-        #Clear the label list
+        #Clear the label list, and annotation list
         self.label_list = []
+        self.last_annotation = []
+
+        #Open the label file and read all annotations into the last_annotation list
+        #This allows the user to redo all of the labels
+        f = open(f'{os.path.join(self.label_dir, self.img_list[self.index].split('.')[0])}.txt', 'r')
+        for line in f.readlines():
+            self.last_annotation.append(line)
+
+        #Close the file, reopen it, clear the file.
+        f.close()
         f = open(f'{os.path.join(self.label_dir, self.img_list[self.index].split('.')[0])}.txt', 'w').close()
+
         self.loadAnnotations()
 
     def undo(self, event):
