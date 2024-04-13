@@ -37,9 +37,13 @@ Each subfolder in the data directory should have the following subfolders:
 
 The annotation tool supports the following shortcuts for navigation and editing:
 
-| Tool          | Controls      | Function     |
-| ------------- |:-------------:|-------------:|
-| **Zoom**      | right-aligned |              |
-| col 2 is      | centered      |              |
-| zebra stripes | are neat      |              |
+| Tool               | Controls         | Function     |
+|:-------------------|:----------------:|-------------:|
+| **Zoom**           | Shift-MouseWheel | resizeImage  |
+| **Change Image**   | MouseWheel       | changeImage  |
+| **Undo**           | Control-Z        | undo         |
+| **Redo**           | Control-Y        | redo         |
+| **Drawing Style**  | ![image](./assets/draw_tool.png)         |              |
+| zebra stripes      | are neat         |              |
+| zebra stripes      | are neat         |              |
 
