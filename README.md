@@ -38,7 +38,7 @@ Each subfolder in the data directory should have the following subfolders:
 The annotation tool supports the following shortcuts for navigation and editing:
 
 | Tool               | Controls         | Function     |
-|:-------------------|:----------------:|-------------:|
+|:------------------:|:----------------:|:------------:|
 | **Zoom**           | Shift-MouseWheel | resizeImage  |
 | **Change Image**   | MouseWheel       | changeImage  |
 | **Undo**           | Control-Z        | undo         |
