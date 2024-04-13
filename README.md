@@ -25,9 +25,9 @@ The YAML Annotation Tool (./YAML/annotation.py) is designed to automatically gen
 
 Directory structure is critical for annotation tool functionality. Each directory for which the tool will be used must have a folder structure that matches the images, below.
 
-![image](https://github.com/rcwaterman/YAML_Annotation/assets/134216651/42efb2ce-920d-4f76-ad50-3ff4424469be)
+![image](./assets/data_folder.png)
 
 Each folder in the directory should have the following subfolders:
 
-![alt text](./assets/folders.png)
+![image](./assets/folders.png)
 
