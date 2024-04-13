@@ -96,8 +96,8 @@ class Annotate:
         self.feed.bind_all("<Shift-MouseWheel>", self.resizeImage)
 
         #Bind key presses to undo and redo last annotation. Used for ctrl-z and ctrl-y functionality
-        self.frm.bind_all("<Control-z>", self.clearLastAnnotation)
-        self.frm.bind_all("<Control-y>", self.redoLastAnnotation)
+        self.frm.bind_all("<Control-z>", self.undo)
+        self.frm.bind_all("<Control-y>", self.redo)
 
         self.change_directory = tk.Button(self.frm, text='Change Directory', command=self.change_dir, font = ('calibre',14,'bold'), fg = "Black").grid(column=1, row=2)
 
@@ -376,7 +376,7 @@ class Annotate:
         f = open(f'{os.path.join(self.label_dir, self.img_list[self.index].split('.')[0])}.txt', 'w').close()
         self.loadAnnotations()
 
-    def clearLastAnnotation(self, event):
+    def undo(self, event):
 
         #clear the label list
         self.label_list = []
@@ -400,7 +400,7 @@ class Annotate:
         except:
             pass
 
-    def redoLastAnnotation(self, event):
+    def redo(self, event):
 
         if len(self.last_annotation)>0:
             #Open the file in read/write mode
