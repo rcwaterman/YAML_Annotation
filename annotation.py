@@ -385,18 +385,21 @@ class Annotate:
         f = open(f'{os.path.join(self.label_dir, self.img_list[self.index].split('.')[0])}.txt', 'r+')
         #Read the lines of the file into a list and remove the last list element
         self.lines = f.readlines()
-        self.last_annotation.append(self.lines[-1])
-        self.lines.pop(-1)
-        #Close the file
-        f.close()
-        #Reopen the file in write mode
-        f = open(f'{os.path.join(self.label_dir, self.img_list[self.index].split('.')[0])}.txt', 'w')
-        #Write the remaining lines back to the file
-        f.writelines(self.lines)
-        #Close the file
-        f.close()
-        #Load the annotations and draw them to the image
-        self.loadAnnotations()
+        try:
+            self.last_annotation.append(self.lines[-1])
+            self.lines.pop(-1)
+            #Close the file
+            f.close()
+            #Reopen the file in write mode
+            f = open(f'{os.path.join(self.label_dir, self.img_list[self.index].split('.')[0])}.txt', 'w')
+            #Write the remaining lines back to the file
+            f.writelines(self.lines)
+            #Close the file
+            f.close()
+            #Load the annotations and draw them to the image
+            self.loadAnnotations()
+        except:
+            pass
 
     def redoLastAnnotation(self, event):
 
