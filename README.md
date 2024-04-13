@@ -43,7 +43,11 @@ The annotation tool supports the following shortcuts for navigation and editing:
 | **Change Image**   | MouseWheel       | changeImage  |
 | **Undo**           | Control-Z        | undo         |
 | **Redo**           | Control-Y        | redo         |
-| **Drawing Style**  | ![image](./assets/draw_tool.png)         | Built into showImage             |
-| zebra stripes      | are neat         |              |
-| zebra stripes      | are neat         |              |
+| **Drawing Style**  | ![image](./assets/draw_tool.png) | GUI Selection |
+| **Classification** | ![image](./assets/classification.png) | GUI Selection |
+| **Change Directory**| ![image](./assets/change_dir.png) | GUI Selection |
+| **Subfolder Selection**| ![image](./assets/subfolder.png) | GUI Selection |
+| **Clear All Annotations**| ![image](./assets/clear_annotations.png) | GUI Selection |
+| **Find Next Image**| ![image](./assets/next_image.png) | GUI Selection |
+
 
