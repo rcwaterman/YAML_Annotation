@@ -103,7 +103,7 @@ class Annotate:
 
         self.clear_annotations = tk.Button(self.frm, text='Clear All Annotations', command=self.clearAllAnnotations, font = ('calibre',14,'bold'), fg = "red").grid(column=2, row=2)
 
-        self.next_annotation = tk.Button(self.frm, text='Next Annotation', command=self.nextAnnotation, font = ('calibre',14,'bold'), fg = "green").grid(column=3, row=2)
+        self.next_annotation = tk.Button(self.frm, text='Find Next Image', command=self.nextAnnotation, font = ('calibre',14,'bold'), fg = "green").grid(column=3, row=2)
 
         self.select_tool = tk.OptionMenu(self.frm, self.tools, *self.tool_list)
         self.select_tool.grid(column=5, row=0)
