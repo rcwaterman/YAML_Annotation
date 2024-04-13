@@ -29,6 +29,5 @@ Directory structure is critical for annotation tool functionality. Each director
 
 Each folder in the directory should have the following subfolders:
 
-![Uploading image.png…]()
-
+![alt text](./assets/folders.png)
 
