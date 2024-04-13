@@ -3,7 +3,6 @@ from tkinter import filedialog, Label, StringVar
 from PIL import ImageTk, Image
 import os
 import cv2
-import decimal
 
 class Annotate:
     def __init__(self):
