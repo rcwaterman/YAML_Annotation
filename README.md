@@ -35,5 +35,11 @@ Each subfolder in the data directory should have the following subfolders:
 
 ![image](./assets/folders.png)
 
-The annotation tool is 
+The annotation tool supports the following shortcuts for navigation and editing:
+
+| Tool          | Controls      | Function     |
+| ------------- |:-------------:|-------------:|
+| **Zoom**      | right-aligned |              |
+| col 2 is      | centered      |              |
+| zebra stripes | are neat      |              |
 
