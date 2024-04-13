@@ -3,6 +3,7 @@ from tkinter import filedialog, Label, StringVar
 from PIL import ImageTk, Image
 import os
 import cv2
+import decimal
 
 class Annotate:
     def __init__(self):
@@ -14,13 +15,16 @@ class Annotate:
         self.image_dir = os.path.join(os.path.join(self.data_dir,self.folder_list[0]),'images')
         self.label_dir = os.path.join(os.path.join(self.data_dir,self.folder_list[0]),'labels')
 
+        #Set up default variables
         self.img_list = []
         self.classifiers = []
         self.last_annotation = []
-        self.img_size = (1280, 960)
         self.init_x, self.init_y, self.x, self.y, self.index = 0,0,0,0,0
         self.from_origin = False #Flag to track whether the showImage function is being called from the getOrigin function. 
         self.drawing = False #This is a flag to fix a bug where clicking on the image draws a bounding box from ((0,0), (x,y))
+        #Set up an array of image sizes incrementing by 0.1 from 0.5 to 1.5
+        self.scale = [round(scale/10,1) for scale in range(5, 15, 1)]
+        self.scale_index = self.scale.index(1.0) #Get the index of 1.0x scale factor
 
         #Pull all of the images and append to list
         for file in os.listdir(self.image_dir):
@@ -66,14 +70,15 @@ class Annotate:
         self.frm = tk.Frame(self.gui)
         self.frm.grid() 
 
-        #Define variables
-        self.tool_list = ["Rectangle", "Circle"]
-        self.text_offset = 10
-
         #Define lists for option menus
         self.obj_class = StringVar(self.frm)
         self.tools = StringVar(self.frm)
         self.subfolders = StringVar(self.frm)
+
+        #Define variables
+        self.tool_list = ["Rectangle", "Circle"]
+        self.text_offset = 10
+        self.img_size = (int(1280*self.scale[self.scale_index]), int(960*self.scale[self.scale_index]))
 
         #Set lists to default settings
         self.obj_class.set(f'{self.classifiers[0]}')
@@ -89,6 +94,7 @@ class Annotate:
         self.feed.bind("<B1-Motion>", self.getOrigin)
         self.feed.bind("<ButtonRelease-1>", self.updateLabel)
         self.feed.bind_all("<MouseWheel>", self.changeImage)
+        self.feed.bind_all("<Shift-MouseWheel>", self.resizeImage)
 
         #Bind key presses to undo and redo last annotation. Used for ctrl-z and ctrl-y functionality
         self.frm.bind_all("<Control-z>", self.clearLastAnnotation)
@@ -98,7 +104,7 @@ class Annotate:
 
         self.clear_annotations = tk.Button(self.frm, text='Clear All Annotations', command=self.clearAllAnnotations, font = ('calibre',14,'bold'), fg = "red").grid(column=2, row=2)
 
-        self.next_annotation = tk.Button(self.frm, text='Next Annotation', command=self.nextAnnotation, font = ('calibre',14,'bold'), fg = "green").grid(column=4, row=2)
+        self.next_annotation = tk.Button(self.frm, text='Next Annotation', command=self.nextAnnotation, font = ('calibre',14,'bold'), fg = "green").grid(column=3, row=2)
 
         self.select_tool = tk.OptionMenu(self.frm, self.tools, *self.tool_list)
         self.select_tool.grid(column=5, row=0)
@@ -115,6 +121,16 @@ class Annotate:
         self.subfolders.trace_add("write",self.change_folder)
 
         self.gui.mainloop()
+
+    def resizeImage(self, event):
+        """
+        Function to resize the display size of the image.
+        """
+        if event.delta < 0:
+            self.img_size = (int(self.img_size[0]*self.scale[self.scale_index-1]), int(self.img_size[1]*self.scale[self.scale_index-1]))
+        elif event.delta > 0:
+            self.img_size = (int(self.img_size[0]*self.scale[self.scale_index+1]), int(self.img_size[1]*self.scale[self.scale_index+1]))
+        self.loadAnnotations()
 
     def change_dir(self):
         """
