@@ -43,7 +43,7 @@ The annotation tool supports the following shortcuts for navigation and editing:
 | **Change Image**   | MouseWheel       | changeImage  |
 | **Undo**           | Control-Z        | undo         |
 | **Redo**           | Control-Y        | redo         |
-| **Drawing Style**  | ![image](./assets/draw_tool.png)         |              |
+| **Drawing Style**  | ![image](./assets/draw_tool.png)         | Built into showImage             |
 | zebra stripes      | are neat         |              |
 | zebra stripes      | are neat         |              |
 
