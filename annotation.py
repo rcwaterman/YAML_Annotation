@@ -10,9 +10,9 @@ class Annotate:
         self.data_dir = filedialog.askdirectory()
 
         #Set default image/label directories
-        self.folder_list = sorted([folder for folder in os.listdir(self.data_dir) if os.path.isdir(os.path.join(self.data_dir, folder))])
-        self.image_dir = os.path.join(os.path.join(self.data_dir,self.folder_list[0]),'images')
-        self.label_dir = os.path.join(os.path.join(self.data_dir,self.folder_list[0]),'labels')
+        self.folder_list = ["original_data", "test", "train", "valid"]
+        self.image_dir = os.path.join(os.path.join(self.data_dir,self.folder_list[self.folder_list.index("original_data")]),'images')
+        self.label_dir = os.path.join(os.path.join(self.data_dir,self.folder_list[self.folder_list.index("original_data")]),'labels')
 
         #Set up default variables
         self.img_list = []
@@ -34,7 +34,7 @@ class Annotate:
         for file in sorted(os.listdir(self.data_dir)):
             if file.endswith('.yaml'):
                 #Open the file
-                f = open(os.path.join(self.label_dir, file), "r")
+                f = open(os.path.join(self.data_dir, file), "r")
                 #Read the lines of a file into a list
                 lines = f.readlines()
                 #loop through each line to find the line that contains the self.classifiers
@@ -73,6 +73,7 @@ class Annotate:
         self.obj_class = StringVar(self.frm)
         self.tools = StringVar(self.frm)
         self.subfolders = StringVar(self.frm)
+        self.image_name = StringVar(self.frm)
 
         #Define variables
         self.tool_list = ["Rectangle", "Circle"]
@@ -82,7 +83,8 @@ class Annotate:
         #Set lists to default settings
         self.obj_class.set(f'{self.classifiers[0]}')
         self.tools.set(self.tool_list[0])
-        self.subfolders.set(self.folder_list[0].split(r'\\')[-1])
+        self.subfolders.set(self.folder_list[self.folder_list.index("original_data")].split(r'\\')[-1])
+        self.image_name.set(f'{self.img_list[self.index]}')
 
         #Set up image feed
         self.feed = Label(self.frm)
@@ -104,6 +106,8 @@ class Annotate:
         self.clear_annotations = tk.Button(self.frm, text='Clear All Annotations', command=self.clearAllAnnotations, font = ('calibre',14,'bold'), fg = "red").grid(column=2, row=2)
 
         self.next_annotation = tk.Button(self.frm, text='Find Next Image', command=self.nextAnnotation, font = ('calibre',14,'bold'), fg = "green").grid(column=3, row=2)
+
+        self.img_name = tk.Label(self.frm, textvariable=self.image_name,  font = ('calibre',12), fg = "black").grid(column=4, row=2)
 
         self.select_tool = tk.OptionMenu(self.frm, self.tools, *self.tool_list)
         self.select_tool.grid(column=5, row=0)
@@ -191,8 +195,12 @@ class Annotate:
         Function to change the subfolder of the data directory that the user is working within.
         """
         #Set image and label dirs
-        self.image_dir = os.path.join(os.path.join(self.data_dir,self.subfolders.get()),'images')
-        self.label_dir = os.path.join(os.path.join(self.data_dir,self.subfolders.get()),'labels')
+        if self.subfolders.get() == "original_data":
+            self.image_dir = os.path.join(self.data_dir, os.path.join(self.subfolders.get(),'images'))
+            self.label_dir = os.path.join(self.data_dir, os.path.join(self.subfolders.get(),'labels'))
+        else:
+            self.image_dir = os.path.join(self.data_dir, os.path.join('images',self.subfolders.get()))
+            self.label_dir = os.path.join(self.data_dir, os.path.join('labels',self.subfolders.get()))
 
         self.img_list = []
         self.last_annotation = []
@@ -217,6 +225,7 @@ class Annotate:
             self.index=self.max_index
 
         self.label_file = f'{os.path.join(self.label_dir, self.img_list[self.index].split('.')[0])}.txt'
+        
         if os.path.exists(self.label_file):
             f = open(self.label_file, "r")
             for idx, line in enumerate(f):
@@ -246,10 +255,12 @@ class Annotate:
             self.index = self.index+1
             self.last_annotation = []
             self.loadAnnotations()
+            self.image_name.set(f'{self.img_list[self.index]}')
         else:
             self.index = self.index-1
             self.last_annotation = []
             self.loadAnnotations()
+            self.image_name.set(f'{self.img_list[self.index]}')
 
     def getInitOrigin(self, eventorigin):
         self.init_x = eventorigin.x if eventorigin.x>=0 else 0
